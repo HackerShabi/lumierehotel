@@ -5,6 +5,7 @@ import Layout from '../components/layout/Layout';
 import { Calendar, Users, CreditCard, MapPin, Phone, Mail, User, Edit3, Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getRooms, addBooking, Room as FirebaseRoom } from '../lib/firebaseServices';
+import { rooms, getRoomPrice as getSharedRoomPrice, getRoomById, ExtendedRoom as SharedExtendedRoom } from '../data/rooms';
 
 interface GuestInfo {
   firstName: string;
@@ -29,215 +30,16 @@ interface PaymentInfo {
   cardholderName: string;
 }
 
-interface Room {
-  id: string;
-  name: string;
-  type: string;
-  price: number;
-  maxOccupancy: number;
-  size: number | string;
-  formattedSize?: string; // Optional formatted size for display
-  description: string;
-  amenities: string[];
-  images: string[];
-  available: boolean;
-  rating?: number;
-  reviewCount?: number;
-  isPopular?: boolean;
-}
+// Using shared interfaces from data/rooms.ts
+type Room = SharedExtendedRoom;
+type ExtendedRoom = SharedExtendedRoom;
+type RoomPricing = import('../data/rooms').RoomPricing;
 
-// Room pricing interface
-interface RoomPricing {
-  single: number;
-  double: number;
-  triple: number;
-  family?: number;
-}
+// Using shared room data from data/rooms.ts
+const staticRooms = rooms;
 
-// Extended room interface with pricing
-interface ExtendedRoom extends Room {
-  pricing: RoomPricing;
-  baseType: string;
-}
-
-// Static room data for fallback
-const staticRooms: ExtendedRoom[] = [
-  {
-    id: '1',
-    name: 'Deluxe Room',
-    type: 'Deluxe',
-    baseType: 'deluxe',
-    price: 8999,
-    pricing: {
-      single: 8999,
-      double: 10999,
-      triple: 12999
-    },
-    maxOccupancy: 3,
-    size: 35,
-    description: 'Spacious deluxe room with modern amenities, attached bathroom, and complimentary breakfast.',
-    images: ['/room1.png'],
-    amenities: ['Free WiFi', 'Air Conditioning', 'Room Service', 'Breakfast Included', 'Private Bathroom', 'Mini Bar'],
-    rating: 4.8,
-    reviewCount: 124,
-    available: true,
-    isPopular: true
-  },
-  {
-    id: '2',
-    name: 'Executive Suite',
-    type: 'Executive',
-    baseType: 'executive',
-    price: 12999,
-    pricing: {
-      single: 12999,
-      double: 14999,
-      triple: 16999
-    },
-    maxOccupancy: 4,
-    size: 45,
-    description: 'Luxurious executive suite with separate living area, premium amenities, and city views.',
-    images: ['/room-blue.jpg'],
-    amenities: ['Free WiFi', 'Air Conditioning', 'Room Service', 'Breakfast Included', 'Living Area', 'City View', 'Premium Toiletries'],
-    rating: 4.9,
-    reviewCount: 89,
-    available: true,
-    isPopular: true
-  },
-  {
-    id: '3',
-    name: 'Standard Room',
-    type: 'Standard',
-    baseType: 'standard',
-    price: 6999,
-    pricing: {
-      single: 6999,
-      double: 8499,
-      triple: 9999
-    },
-    maxOccupancy: 3,
-    size: 25,
-    description: 'Comfortable standard room with essential amenities and modern furnishings.',
-    images: ['/room-green.jpg'],
-    amenities: ['Free WiFi', 'Air Conditioning', 'Private Bathroom', 'Daily Housekeeping'],
-    rating: 4.5,
-    reviewCount: 156,
-    available: true
-  },
-  {
-    id: '4',
-    name: 'Premium Room',
-    type: 'Premium',
-    baseType: 'premium',
-    price: 10999,
-    pricing: {
-      single: 10999,
-      double: 12999,
-      triple: 14999
-    },
-    maxOccupancy: 3,
-    size: 40,
-    description: 'Premium room with enhanced comfort, modern decor, and additional amenities.',
-    images: ['/room-blue-2.jpg'],
-    amenities: ['Free WiFi', 'Air Conditioning', 'Room Service', 'Breakfast Included', 'Balcony', 'Premium Bedding'],
-    rating: 4.7,
-    reviewCount: 98,
-    available: true
-  },
-  {
-    id: '5',
-    name: 'Business Room',
-    type: 'Business',
-    baseType: 'business',
-    price: 9999,
-    pricing: {
-      single: 9999,
-      double: 11999,
-      triple: 13999
-    },
-    maxOccupancy: 2,
-    size: 30,
-    description: 'Business-oriented room with work desk, high-speed internet, and business center access.',
-    images: ['/room-green-2.jpg'],
-    amenities: ['Free WiFi', 'Work Desk', 'Business Center Access', 'Air Conditioning', 'Coffee Maker'],
-    rating: 4.6,
-    reviewCount: 73,
-    available: true
-  },
-  {
-    id: '6',
-    name: 'Luxury Suite',
-    type: 'Luxury',
-    baseType: 'luxury',
-    price: 15999,
-    pricing: {
-      single: 15999,
-      double: 17999,
-      triple: 19999
-    },
-    maxOccupancy: 4,
-    size: 60,
-    description: 'Opulent luxury suite with premium furnishings, spacious layout, and exclusive amenities.',
-    images: ['/room-blue-3.jpg'],
-    amenities: ['Free WiFi', 'Air Conditioning', '24/7 Room Service', 'Breakfast Included', 'Jacuzzi', 'Premium View', 'Butler Service'],
-    rating: 4.9,
-    reviewCount: 45,
-    available: true,
-    isPopular: true
-  },
-  {
-    id: '7',
-    name: 'Family Suite Lower Ground',
-    type: 'Family Suite Lower',
-    baseType: 'family-suite-lower',
-    price: 15999,
-    pricing: {
-      single: 15999,
-      double: 15999,
-      triple: 15999,
-      family: 15999
-    },
-    maxOccupancy: 6,
-    size: 60,
-    description: 'Spacious family suite on the lower ground floor with premium amenities, separate living area, and accommodation for up to 6 guests.',
-    images: ['/room1.png', '/room-blue.jpg'],
-    amenities: ['Separate Living Area', 'Kitchenette', 'Breakfast Included', 'WiFi', 'Air Conditioning', 'Room Service', 'Private Bathroom', 'Family Friendly'],
-    rating: 4.9,
-    reviewCount: 45,
-    available: true,
-    isPopular: true
-  },
-  {
-    id: '8',
-    name: 'Family Suite Upper Ground',
-    type: 'Family Suite Upper',
-    baseType: 'family-suite-upper',
-    price: 16999,
-    pricing: {
-      single: 16999,
-      double: 16999,
-      triple: 16999,
-      family: 16999
-    },
-    maxOccupancy: 6,
-    size: 60,
-    description: 'Spacious family suite on the upper ground floor with premium amenities, separate living area, and accommodation for up to 6 guests.',
-    images: ['/room1.png', '/room-green.jpg'],
-    amenities: ['Separate Living Area', 'Kitchenette', 'Breakfast Included', 'WiFi', 'Air Conditioning', 'Room Service', 'Private Bathroom', 'Family Friendly'],
-    rating: 4.8,
-    reviewCount: 38,
-    available: true,
-    isPopular: true
-  }
-];
-
-// Get pricing for a room based on occupancy
-const getRoomPrice = (room: ExtendedRoom | Room, occupancy: 'single' | 'double' | 'triple' | 'family'): number => {
-  if ('pricing' in room && room.pricing) {
-    return room.pricing[occupancy] || room.price;
-  }
-  return room.price;
-};
+// Use shared getRoomPrice function
+const getRoomPrice = getSharedRoomPrice;
 
 const CheckoutPage = () => {
   const router = useRouter();
@@ -373,16 +175,7 @@ const CheckoutPage = () => {
             
             if (staticRoom) {
               console.log('Using static room data for ID:', currentRoomId);
-              // Create a formatted size string for display
-              const formattedSize = typeof staticRoom.size === 'number' ? 
-                `${staticRoom.size} sqm` : (staticRoom.size ? String(staticRoom.size) : 'N/A');
-              
-              // Create a new room object with the formatted size for display
-              const roomWithFormattedSize = {
-                ...staticRoom,
-                formattedSize: formattedSize
-              };
-              setRoom(roomWithFormattedSize as Room);
+              setRoom(staticRoom);
               setSelectedRoom(staticRoom);
               // Set initial price based on single occupancy
               setDynamicPrice(getRoomPrice(staticRoom, 'single'));
@@ -397,16 +190,7 @@ const CheckoutPage = () => {
             
             if (selectedRoom) {
               console.log('Room found in Firebase:', selectedRoom);
-              // Create a formatted size string for display
-              const formattedSize = typeof selectedRoom.size === 'number' ? 
-                `${selectedRoom.size} sqm` : (selectedRoom.size ? String(selectedRoom.size) : 'N/A');
-              
-              // Create a new room object with the formatted size for display
-              const roomWithFormattedSize = {
-                ...selectedRoom,
-                formattedSize: formattedSize
-              };
-              setRoom(roomWithFormattedSize as Room);
+              setRoom(selectedRoom as Room);
               setLoading(false);
             } else {
               console.error('Room not found with ID:', currentRoomId);
@@ -637,7 +421,7 @@ const CheckoutPage = () => {
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
                   <p className="font-medium text-gray-900">{room?.name}</p>
-                  <p className="text-sm text-gray-600 capitalize">{room?.type} • {room?.formattedSize || `${room?.size} sqm`}</p>
+                  <p className="text-sm text-gray-600 capitalize">{room?.type} • {room?.size}</p>
                   <p className="text-sm text-gray-600">₹{dynamicPrice}/night</p>
                 </div>
                 
@@ -1263,7 +1047,7 @@ const CheckoutPage = () => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Size:</span>
-                        <span className="font-medium text-black">{room.formattedSize || `${room.size} sqm`}</span>
+                        <span className="font-medium text-black">{room.size}</span>
                       </div>
                     </div>
                   </div>
