@@ -9,7 +9,7 @@ const attractions = [
     category: 'Culture',
     distance: '8.5 km',
     walkTime: '15 min drive',
-    image: '/faisal-mosque.jpg',
+    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
     description: 'Iconic mosque and one of the largest in the world, a must-visit landmark of Islamabad.'
   },
   {

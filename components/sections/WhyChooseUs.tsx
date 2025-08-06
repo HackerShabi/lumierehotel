@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { 
   MapPinIcon, 
@@ -43,6 +43,42 @@ const benefits = [
 ]
 
 const WhyChooseUs: React.FC = () => {
+  const [happyGuestsCount, setHappyGuestsCount] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+  const statsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true)
+          // Animate counter from 0 to 500
+          let start = 0
+          const end = 500
+          const duration = 2000 // 2 seconds
+          const increment = end / (duration / 16) // 60fps
+          
+          const timer = setInterval(() => {
+            start += increment
+            if (start >= end) {
+              setHappyGuestsCount(end)
+              clearInterval(timer)
+            } else {
+              setHappyGuestsCount(Math.floor(start))
+            }
+          }, 16)
+        }
+      },
+      { threshold: 0.5 }
+    )
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [isVisible])
+
   return (
     <section id="why-choose-us" className="section-padding bg-gray-50">
       <div className="container-custom">
@@ -94,6 +130,7 @@ const WhyChooseUs: React.FC = () => {
 
         {/* Stats Section */}
         <motion.div
+          ref={statsRef}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
@@ -103,11 +140,11 @@ const WhyChooseUs: React.FC = () => {
           <div className="bg-luxury-dark rounded-2xl p-8 md:p-12">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div className="text-white">
-                <div className="text-3xl md:text-4xl font-bold text-cyan-400 mb-2">500+</div>
+                <div className="text-3xl md:text-4xl font-bold text-cyan-400 mb-2">{happyGuestsCount}+</div>
                 <div className="text-gray-300">Happy Guests</div>
               </div>
               <div className="text-white">
-                <div className="text-3xl md:text-4xl font-bold text-cyan-400 mb-2">50+</div>
+                <div className="text-3xl md:text-4xl font-bold text-cyan-400 mb-2">6+</div>
                 <div className="text-gray-300">Luxury Rooms</div>
               </div>
               <div className="text-white">

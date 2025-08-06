@@ -89,10 +89,10 @@ const ServicesHighlight: React.FC = () => {
               >
                 <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full">
                   <div className="text-center">
-                    <div className="w-14 h-14 bg-gradient-to-r from-luxury-gold to-gold-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-14 h-14 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                       <IconComponent className="h-7 w-7 text-white" />
                     </div>
-                    <h3 className="text-lg font-semibold text-luxury-dark mb-3 group-hover:text-luxury-gold transition-colors duration-300">
+                    <h3 className="text-lg font-semibold text-luxury-dark mb-3 group-hover:text-cyan-500 transition-colors duration-300">
                       {service.title}
                     </h3>
                     <p className="text-gray-600 text-sm leading-relaxed">
@@ -137,9 +137,9 @@ const ServicesHighlight: React.FC = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg hover:bg-luxury-gold/10 transition-colors duration-300"
+                className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg hover:bg-cyan-500/10 transition-colors duration-300"
               >
-                <div className="w-2 h-2 bg-luxury-gold rounded-full flex-shrink-0" />
+                <div className="w-2 h-2 bg-cyan-500 rounded-full flex-shrink-0" />
                 <span className="text-gray-700 text-sm font-medium">{amenity}</span>
               </motion.div>
             ))}
@@ -156,7 +156,7 @@ const ServicesHighlight: React.FC = () => {
         >
           <Link
             href="/services"
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-luxury-gold to-gold-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
           >
             <span>View All Services</span>
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
