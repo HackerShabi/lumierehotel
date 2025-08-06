@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Sample Data - Lumiere Hotel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin: 10px 0;
+    }
+    #output {
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-top: 20px;
+      height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Add Sample Data - Lumiere Hotel</h1>
+  <p>Click the button below to add sample data to the database:</p>
+  <button id="addDataBtn">Add Sample Data</button>
+  <div id="output"></div>
+
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDGjyG94c14hQj6NAHaB9Qx9P7tCJLmNRc",
+      authDomain: "hotelwebsite-bca40.firebaseapp.com",
+      projectId: "hotelwebsite-bca40",
+      storageBucket: "hotelwebsite-bca40.appspot.com",
+      messagingSenderId: "1095801212126",
+      appId: "1:1095801212126:web:e3a8a6d3e0b1e3b7a7c5a9"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    // Output log function
+    function log(message, type = 'info') {
+      const output = document.getElementById('output');
+      const logEntry = document.createElement('div');
+      logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      if (type === 'success') logEntry.className = 'success';
+      if (type === 'error') logEntry.className = 'error';
+      output.appendChild(logEntry);
+      output.scrollTop = output.scrollHeight;
+    }
+    
+    // Function to add sample data
+    async function addSampleData() {
+      const button = document.getElementById('addDataBtn');
+      button.disabled = true;
+      
+      try {
+        const websiteId = 'mylumierehotel';
+        log('Starting to add sample data...');
+        
+        // Create parent documents
+        const collections = ['rooms', 'bookings', 'contacts'];
+        for (const collection of collections) {
+          try {
+            await db.collection(collection).doc(websiteId).set({
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              description: `Container for ${websiteId} ${collection}`
+            });
+            log(`Created parent document for ${collection}/${websiteId}`, 'success');
+          } catch (error) {
+            log(`Error creating parent document for ${collection}/${websiteId}: ${error.message}`, 'error');
+          }
+        }
+        
+        // Add sample rooms
+        const rooms = [
+          {
+            id: 'deluxe-king',
+            name: 'Deluxe King Room',
+            description: 'Spacious room with king-sized bed and city view.',
+            price: 250,
+            capacity: 2,
+            amenities: ['Free Wi-Fi', 'Minibar', 'Room Service', 'TV', 'Air Conditioning'],
+            images: [
+              '/images/rooms/deluxe-king-1.jpg',
+              '/images/rooms/deluxe-king-2.jpg',
+              '/images/rooms/deluxe-king-3.jpg'
+            ],
+            size: '40 m²',
+            bedType: 'King',
+            featured: true,
+            createdAt: firebase.firestore.Timestamp.now(),
+            updatedAt: firebase.firestore.Timestamp.now(),
+            website: websiteId
+          },
+          {
+            id: 'executive-suite',
+            name: 'Executive Suite',
+            description: 'Luxury suite with separate living area and panoramic views.',
+            price: 450,
+            capacity: 2,
+            amenities: ['Free Wi-Fi', 'Minibar', 'Room Service', 'TV', 'Air Conditioning', 'Jacuzzi', 'Lounge Access'],
+            images: [
+              '/images/rooms/executive-suite-1.jpg',
+              '/images/rooms/executive-suite-2.jpg',
+              '/images/rooms/executive-suite-3.jpg'
+            ],
+            size: '65 m²',
+            bedType: 'King',
+            featured: true,
+            createdAt: firebase.firestore.Timestamp.now(),
+            updatedAt: firebase.firestore.Timestamp.now(),
+            website: websiteId
+          },
+          {
+            id: 'family-room',
+            name: 'Family Room',
+            description: 'Comfortable room for families with two queen beds.',
+            price: 350,
+            capacity: 4,
+            amenities: ['Free Wi-Fi', 'Minibar', 'Room Service', 'TV', 'Air Conditioning', 'Connecting Rooms Available'],
+            images: [
+              '/images/rooms/family-room-1.jpg',
+              '/images/rooms/family-room-2.jpg',
+              '/images/rooms/family-room-3.jpg'
+            ],
+            size: '55 m²',
+            bedType: 'Two Queens',
+            featured: false,
+            createdAt: firebase.firestore.Timestamp.now(),
+            updatedAt: firebase.firestore.Timestamp.now(),
+            website: websiteId
+          }
+        ];
+        
+        // Add each room
+        for (const room of rooms) {
+          try {
+            await db.collection(`rooms/${websiteId}/roomData`).doc(room.id).set(room);
+            log(`Added room: ${room.name}`, 'success');
+          } catch (error) {
+            log(`Error adding room ${room.name}: ${error.message}`, 'error');
+          }
+        }
+        
+        // Add a sample booking
+        const booking = {
+          id: 'sample-booking-1',
+          roomId: 'deluxe-king',
+          roomName: 'Deluxe King Room',
+          checkIn: firebase.firestore.Timestamp.fromDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)),
+          checkOut: firebase.firestore.Timestamp.fromDate(new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)),
+          guestName: 'John Doe',
+          guestEmail: 'john.doe@example.com',
+          guestPhone: '+1234567890',
+          adults: 2,
+          children: 0,
+          totalPrice: 750,
+          status: 'confirmed',
+          paymentStatus: 'paid',
+          specialRequests: 'Early check-in if possible',
+          createdAt: firebase.firestore.Timestamp.now(),
+          website: websiteId
+        };
+        
+        try {
+          await db.collection(`bookings/${websiteId}/bookingData`).doc(booking.id).set(booking);
+          log('Added sample booking', 'success');
+        } catch (error) {
+          log(`Error adding sample booking: ${error.message}`, 'error');
+        }
+        
+        // Add a sample contact
+        const contact = {
+          id: 'sample-contact-1',
+          name: 'Jane Smith',
+          email: 'jane.smith@example.com',
+          subject: 'Inquiry about Executive Suite',
+          message: 'I would like to know if the Executive Suite has a view of the ocean and if it includes breakfast.',
+          read: false,
+          createdAt: firebase.firestore.Timestamp.now(),
+          website: websiteId
+        };
+        
+        try {
+          await db.collection(`contacts/${websiteId}/contactData`).doc(contact.id).set(contact);
+          log('Added sample contact', 'success');
+        } catch (error) {
+          log(`Error adding sample contact: ${error.message}`, 'error');
+        }
+        
+        log('Sample data added successfully!', 'success');
+        log('You can now go to the Admin Panel to see the data: <a href="/admin">Open Admin Panel</a>');
+      } catch (error) {
+        log(`Error running script: ${error.message}`, 'error');
+      } finally {
+        button.disabled = false;
+      }
+    }
+    
+    // Add event listener to button
+    document.getElementById('addDataBtn').addEventListener('click', addSampleData);
+    
+    // Log initialization
+    log('Page loaded. Click the button to add sample data.');
+  </script>
+</body>
+</html>

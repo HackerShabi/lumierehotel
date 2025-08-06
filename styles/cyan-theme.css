@@ -1,0 +1,135 @@
+/* Cyan and White Theme */
+:root {
+  --cyan-50: #ecfeff;
+  --cyan-100: #cffafe;
+  --cyan-200: #a5f3fc;
+  --cyan-300: #67e8f9;
+  --cyan-400: #22d3ee;
+  --cyan-500: #06b6d4;
+  --cyan-600: #0891b2;
+  --cyan-700: #0e7490;
+  --cyan-800: #155e75;
+  --cyan-900: #164e63;
+}
+
+/* Override luxury gold with cyan */
+.bg-luxury-gold {
+  background-color: var(--cyan-500) !important;
+}
+
+.text-luxury-gold {
+  color: var(--cyan-500) !important;
+}
+
+.border-luxury-gold {
+  border-color: var(--cyan-500) !important;
+}
+
+.hover\:bg-luxury-gold:hover {
+  background-color: var(--cyan-600) !important;
+}
+
+.hover\:text-luxury-gold:hover {
+  color: var(--cyan-500) !important;
+}
+
+.focus\:ring-luxury-gold:focus {
+  --tw-ring-color: var(--cyan-500) !important;
+}
+
+.focus\:border-luxury-gold:focus {
+  border-color: var(--cyan-500) !important;
+}
+
+/* Additional cyan variants */
+.bg-cyan-primary {
+  background-color: var(--cyan-500);
+}
+
+.bg-cyan-secondary {
+  background-color: var(--cyan-100);
+}
+
+.text-cyan-primary {
+  color: var(--cyan-500);
+}
+
+.text-cyan-secondary {
+  color: var(--cyan-700);
+}
+
+.border-cyan-primary {
+  border-color: var(--cyan-500);
+}
+
+.hover\:bg-cyan-primary:hover {
+  background-color: var(--cyan-600);
+}
+
+.hover\:bg-cyan-secondary:hover {
+  background-color: var(--cyan-200);
+}
+
+/* Button styles */
+.btn-cyan {
+  background-color: var(--cyan-500);
+  color: white;
+  border: 1px solid var(--cyan-500);
+  transition: all 0.3s ease;
+}
+
+.btn-cyan:hover {
+  background-color: var(--cyan-600);
+  border-color: var(--cyan-600);
+}
+
+.btn-cyan-outline {
+  background-color: transparent;
+  color: var(--cyan-500);
+  border: 1px solid var(--cyan-500);
+  transition: all 0.3s ease;
+}
+
+.btn-cyan-outline:hover {
+  background-color: var(--cyan-500);
+  color: white;
+}
+
+/* Gradient backgrounds */
+.bg-gradient-cyan {
+  background: linear-gradient(135deg, var(--cyan-400) 0%, var(--cyan-600) 100%);
+}
+
+.bg-gradient-cyan-light {
+  background: linear-gradient(135deg, var(--cyan-50) 0%, var(--cyan-100) 100%);
+}
+
+/* Hero section specific */
+.hero-overlay {
+  background: linear-gradient(rgba(6, 182, 212, 0.8), rgba(14, 116, 144, 0.8));
+}
+
+/* Card hover effects */
+.card-hover-cyan:hover {
+  box-shadow: 0 10px 25px rgba(6, 182, 212, 0.2);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Input focus styles */
+.input-cyan:focus {
+  border-color: var(--cyan-500);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+}
+
+/* Navigation active states */
+.nav-active-cyan {
+  color: var(--cyan-500);
+  border-bottom: 2px solid var(--cyan-500);
+}
+
+/* Loading spinner */
+.spinner-cyan {
+  border-color: var(--cyan-200);
+  border-top-color: var(--cyan-500);
+}

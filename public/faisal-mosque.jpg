@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Sky background -->
+  <rect width="800" height="400" fill="#87CEEB"/>
+  
+  <!-- Ground -->
+  <rect y="400" width="800" height="200" fill="#90EE90"/>
+  
+  <!-- Main mosque structure -->
+  <rect x="200" y="200" width="400" height="200" fill="#F5F5DC" stroke="#D3D3D3" stroke-width="2"/>
+  
+  <!-- Central dome -->
+  <ellipse cx="400" cy="200" rx="80" ry="60" fill="#4682B4"/>
+  <ellipse cx="400" cy="190" rx="75" ry="55" fill="#5F9EA0"/>
+  
+  <!-- Side domes -->
+  <ellipse cx="280" cy="220" rx="40" ry="30" fill="#4682B4"/>
+  <ellipse cx="520" cy="220" rx="40" ry="30" fill="#4682B4"/>
+  
+  <!-- Minarets -->
+  <rect x="150" y="100" width="20" height="300" fill="#F5F5DC" stroke="#D3D3D3" stroke-width="1"/>
+  <rect x="630" y="100" width="20" height="300" fill="#F5F5DC" stroke="#D3D3D3" stroke-width="1"/>
+  
+  <!-- Minaret tops -->
+  <ellipse cx="160" cy="100" rx="15" ry="20" fill="#4682B4"/>
+  <ellipse cx="640" cy="100" rx="15" ry="20" fill="#4682B4"/>
+  
+  <!-- Main entrance arch -->
+  <path d="M 350 400 Q 400 350 450 400 Z" fill="#2F4F4F"/>
+  
+  <!-- Windows -->
+  <rect x="250" y="250" width="30" height="40" fill="#2F4F4F" rx="15"/>
+  <rect x="520" y="250" width="30" height="40" fill="#2F4F4F" rx="15"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="400" cy="180" r="8" fill="#FFD700"/>
+  <polygon points="400,165 405,175 395,175" fill="#FFD700"/>
+  
+  <!-- Text label -->
+  <text x="400" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2F4F4F">Faisal Mosque, Islamabad</text>
+</svg>
