@@ -105,15 +105,17 @@ const CheckoutPage = () => {
   useEffect(() => {
     const fetchAllRooms = async () => {
       try {
-                let rooms = await getRooms();
+        // Try Firebase first
+        let rooms = await getRooms();
         if (!rooms || rooms.length === 0) {
-          console.log('Firebase returned empty rooms, using static fallback');
+          console.log('Firebase returned empty rooms, using shared room data');
+          // Use the shared room data from data/rooms.ts
           rooms = staticRooms;
         }
         setAllRooms(rooms as Room[]);
       } catch (error) {
         console.error('Error fetching all rooms:', error);
-        // Use the updated static room data
+        // Use the shared room data from data/rooms.ts
         setAllRooms(staticRooms as Room[]);
       }
     };
