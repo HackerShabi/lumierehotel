@@ -57,3 +57,12 @@ coverage/
 
 # Clean directory
 clean/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
+# Service Account Keys (IMPORTANT: Never commit these)
+serviceAccountKey.json
+*-firebase-adminsdk-*.json
